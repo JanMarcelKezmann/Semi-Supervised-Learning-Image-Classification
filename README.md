@@ -55,7 +55,7 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 ## License
 
-Project is distributed under <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/master/LICENSE">MIT License</a>.
+Project is distributed under <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/LICENSE">MIT License</a>.
 
 ## References
 
