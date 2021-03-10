@@ -20,7 +20,6 @@ def download_datset(dataset_name):
 	else:
 		raise ValueError("'dataset_name' should be one of 'SVHN', 'Cifar10', 'Cifar100'")
 
-
 	return train, test
 
 
