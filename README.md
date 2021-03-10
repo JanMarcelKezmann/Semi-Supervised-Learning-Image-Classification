@@ -30,7 +30,9 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 **Requirements**
 1) Python >= 3.6
 2) tensorflow >= 2.0
-3) numpy
+3) numpy >= 1.16
+4) pyyaml >= 5.0.0
+5) tqdm >= 4.0.0
 
 <p>Furthermore just execute the following command to download and install the git repository.</p>
 
@@ -44,7 +46,7 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 ## Citing
 
-    @misc{Kezmann:2020,
+    @misc{Kezmann:2021,
       Author = {Jan-Marcel Kezmann},
       Title = {Semi-Supervised Learning Image Classification},
       Year = {2021},
@@ -60,3 +62,4 @@ Project is distributed under <a href="https://github.com/JanMarcelKezmann/Semi-S
 ## References
 
  - Google Research, FixMatch, github.com, <a href="https://github.com/google-research/fixmatch">FixMatch</a>
+ - Nathan Tozer, mixmatch-tensorflow2.0, github.com <a href="https://github.com/ntozer/mixmatch-tensorflow2.0">mixmatch-tensorflow2.0</a>
