@@ -3,7 +3,7 @@ epochs: 2048
 pre_val_iter: 1024
 batch_size: 64
 lr: 0.002
-num_lab_samples: 250
+num_lab_samples: 1000
 val_samples: 5000
 T: 0.5
 K: 2
