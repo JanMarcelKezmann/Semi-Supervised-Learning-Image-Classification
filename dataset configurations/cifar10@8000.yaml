@@ -1,10 +1,10 @@
 dataset: 'cifar10'
 epochs: 100
-pre_val_iter: 312
+pre_val_iter: 250
 batch_size: 128
 lr: 0.1
-num_lab_samples: 1000
-val_samples: 9000
+num_lab_samples: 8000
+val_samples: 10000
 total_train_samples: 50000
 T: 0.5
 K: 2
