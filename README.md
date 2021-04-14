@@ -18,6 +18,7 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
  - [Installation and Setup](#installation-and-setup)
  - [Run an example](#run-a-pipeline)
  - [Algorithms and Papers](#algorithms-and-papers)
+ - [Models and Optimizers](#models-and-optimizers)
  - [Citing](#citing)
  - [License](#license)
  - [References](#references)
@@ -52,6 +53,8 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 (To be developed)
 
+## Models and Optimizers
+
 ### CNN Models
 
 |Type         | Names |
@@ -64,6 +67,10 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 |**MobileNet**    | ``'mobilenet' 'mobilenetv2'`` |
 |**NasNet**    | ``'nasnetlarge' 'nasnetmobile'`` |
 |**EfficientNet** | ``'efficientnetb0' 'efficientnetb1' 'efficientnetb2' 'efficientnetb3' 'efficientnetb4' 'efficientnetb5' 'efficientnetb6' efficientnetb7'``|
+
+### Optimizers
+
+(To be developed)
 
 ## Citing
 
