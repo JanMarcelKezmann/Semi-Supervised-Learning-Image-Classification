@@ -8,13 +8,16 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 ## Main Library Features
 
-(To be developed)
- 
+ - High Level API
+ - 4 Semi Supervised Learning Algorithms for Image Classification (more to come)
+ - Many classic and state-of-the-art CNN Models for training available (including pretraining on ImageNet)
+
 # Table of Contents
 
  - [Examples](#examples)
  - [Installation and Setup](#installation-and-setup)
  - [Run an example](#run-a-pipeline)
+ - [Algorithms and Papers](#algorithms-and-papers)
  - [Citing](#citing)
  - [License](#license)
  - [References](#references)
@@ -29,10 +32,11 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 **Requirements**
 1) Python >= 3.6
-2) tensorflow >= 2.0
-3) numpy >= 1.16
-4) pyyaml >= 5.0.0
-5) tqdm >= 4.0.0
+2) tensorflow >= 2.0.0
+3) tensorflow_probability >= 0.10.1
+4) numpy >= 1.16.0
+5) pyyaml >= 5.0.0
+6) tqdm >= 4.0.0
 
 <p>Furthermore just execute the following command to download and install the git repository.</p>
 
@@ -42,7 +46,24 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
     
 ## Run An Example
 
-(To  be developed)
+(To be developed)
+
+## Algorithms and Papers
+
+(To be developed)
+
+### CNN Models
+
+|Type         | Names |
+|-------------|-------|
+|**VGG**          | ``'vgg16' 'vgg19'``|
+|**ResNet**       | ``'resnet50' 'resnet50v2' 'resnet101' 'resnet101v2' 'resnet152' 'resnet152v2'``|
+|**Inception**    | ``'inceptionv3' 'inceptionsresnetv2'`` |
+|**Xception**     | ``'xception'``|
+|**DenseNet**     | ``'densenet121' 'densenet169' 'densenet201'``|
+|**MobileNet**    | ``'mobilenet' 'mobilenetv2'`` |
+|**NasNet**    | ``'nasnetlarge' 'nasnetmobile'`` |
+|**EfficientNet** | ``'efficientnetb0' 'efficientnetb1' 'efficientnetb2' 'efficientnetb3' 'efficientnetb4' 'efficientnetb5' 'efficientnetb6' efficientnetb7'``|
 
 ## Citing
 
