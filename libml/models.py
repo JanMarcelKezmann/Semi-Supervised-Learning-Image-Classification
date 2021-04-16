@@ -1,10 +1,27 @@
 import tensorflow as tf
 
-def get_model(name="ResNet50", weights="imagenet", height=None, width=None,
+def get_model(name="ResNet50", weights=None, height=None, width=None,
     classes=None, include_top=True, pooling=None, alpha=1.0,
-    classifier_activation=None, depth_multiplier=1.0):
+    classifier_activation=None, depth_multiplier=1.0, dropout=0.001):
     """
     Returns the tf.keras.applications model of choise with weight, height, width and further configurations.
+
+    Args:
+        name:                   string, name of the model
+        weights:                One of None (random initialization), 'imagenet' (pre-training on ImageNet)
+        height:                 int, height of model inputs
+        width:                  int, width of model inputs
+        classes:                int, number of classes
+        include_top:            Boolean, Whether to include the fully-connected layer at the top of the network.
+        pooling:                Optional pooling mode for feature extraction when include_top is False. Options are one of [None, "avg", "max"]
+        classifier_activation:  A str or callable. The activation function to use on the "top" layer. Ignored unless include_top=True.
+                                    Set classifier_activation=None to return the logits of the "top" layer.
+        alpha:                  float, between 0 and 1, controls the width of the network. (MobilieNet and MobileNetV2 only)
+        depth_multiplier:       float, depth multiplier for depthwise convolution. (MobileNet only)
+        dropout:                float, dropout rate (MobileNet only)
+
+    Returns:
+        tf.keras.applications Model
     """
 
     if not isinstance(height, int) or not isinstance(width, int):
@@ -70,7 +87,7 @@ def get_model(name="ResNet50", weights="imagenet", height=None, width=None,
     elif name.lower() == "mobilenetv2":
         if height <= 31 or width <= 31:
             raise ValueError("Parameters 'height' and 'width' should not be smaller than 32.")
-        base_model = tf.keras.applications.MobileNetV2(include_top=include_top, classes=classes, weights=weights, input_shape=[height, width, 3], pooling=pooling, alpha=alpha, depth_multiplier=depth_multiplier, dropout=dropout, classifier_activation=classifier_activation)
+        base_model = tf.keras.applications.MobileNetV2(include_top=include_top, classes=classes, weights=weights, input_shape=[height, width, 3], pooling=pooling, alpha=alpha, classifier_activation=classifier_activation)
     elif name.lower() == "nasnetlarge":
         if height <= 31 or width <= 31:
             raise ValueError("Parameters 'height' and 'width' should not be smaller than 32.")
