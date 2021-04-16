@@ -14,6 +14,12 @@ def setup_tf(tf_cpp_min_log_level="2", log_error=logging.ERROR):
 def load_config(args):
     """
     Adds dataset and dataset size specific configurations to args.
+
+    Args:
+        args:   dictionary, containing parser arguments and its values
+
+    Returns
+        Updated dictionary of args taking dataset specific changes into account
     """
     # # Get directory name of real path
     # dir_path = os.path.dirname(os.path.realpath(__file__))
