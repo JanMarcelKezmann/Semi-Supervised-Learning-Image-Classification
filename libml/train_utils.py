@@ -38,4 +38,24 @@ def ema(model, ema_model, ema_decay):
             ema_var.assign((1 - ema_decay) * var + ema_decay * ema_var)
         else:
             ema_var.assign(tf.identity(var))
+
+
+def linear_rampup(epochs, epoch, pre_val_iter, iteration):
+    """
+    Computes linear rampup value usually used for unsupervised loss multiplier.
+
+    Args:
+        epochs:         int, number of epochs
+        epoch:          int, current epoch
+        pre_val_iter:   int, number of iterations prior to validation
+        iteration:      int, current iteration in epoch
+    
+    Returns:
+        float, between 0 and 1.
+    """
+    total_steps = float(epochs * pre_val_iter)
+    current_step = float(epoch * pre_val_iter) + (float(iteration) / float(pre_val_iter))
+
+    rampup = np.clip(current_step / total_steps, 0., 1.)
+    return float(rampup)
    
