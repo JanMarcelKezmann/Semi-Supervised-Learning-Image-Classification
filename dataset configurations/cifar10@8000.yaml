@@ -1,16 +1,8 @@
 dataset: 'cifar10'
-epochs: 100
 pre_val_iter: 250
-batch_size: 128
-lr: 0.1
 num_lab_samples: 8000
 val_samples: 10000
 total_train_samples: 50000
-T: 0.5
-K: 2
-alpha: 0.75
-lambda_u: 75
-rampup: 1024
 height: 32
 width: 32
 channels: 3
