@@ -23,6 +23,7 @@ def pi_model(x, u, height, width):
     return x_augment, u_teacher, u_student
 
 
+@tf.function
 def ssl_loss_pi_model(labels_x, logits_x, logits_teacher, logits_student):
     """
     Computes two cross entropy losses based on the labeled and unlabeled data.

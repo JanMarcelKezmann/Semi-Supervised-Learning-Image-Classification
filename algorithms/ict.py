@@ -23,6 +23,7 @@ def ict(x, u, height, width):
     return x_augment, u_teacher, u_student
 
 
+@tf.function
 def ssl_loss_ict(labels_x, logits_x, labels_teacher, logits_student):
     """
     Computes two cross entropy losses based on the labeled and unlabeled data.
@@ -42,6 +43,6 @@ def ssl_loss_ict(labels_x, logits_x, labels_teacher, logits_student):
     x_loss = tf.reduce_mean(x_loss)
 
     ict_loss = tf.reduce_mean((labels_teacher - tf.nn.softmax(logits_student)) ** 2, -1)
-    ict_loss = tf.reduce_mean(pm_loss)
+    ict_loss = tf.reduce_mean(ict_loss)
     
-    return x_loss, loss_ict
+    return x_loss, ict_loss

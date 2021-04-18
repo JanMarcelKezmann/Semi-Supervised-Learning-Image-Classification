@@ -3,6 +3,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 
 
+@tf.function
 def kl_divergence_from_logits(logits_a, logits_b):
     """
     Gets KL divergence from logits parameterizing categorical distributions.
@@ -22,6 +23,7 @@ def kl_divergence_from_logits(logits_a, logits_b):
     return tfp.distributions.kl_divergence(distrib_a, distrib_b)
 
 
+@tf.function
 def entropy(logits):
     """
     Computes Entropy of model outputs, i.e. logits.
@@ -35,6 +37,7 @@ def entropy(logits):
     return tfp.distributions.Categorical(logits=logits).entropy()
 
 
+@tf.function
 def kl_divergence_with_logits(logits_a, logits_b):
     """
     Compute the per-element KL-divergence of a batch.
@@ -53,6 +56,7 @@ def kl_divergence_with_logits(logits_a, logits_b):
     return a_loga - a_logb
 
 
+@tf.function
 def get_normalized_vector(v):
     """
     Normalize v by infinity and L2 norms.
@@ -75,6 +79,7 @@ def get_normalized_vector(v):
     return v
 
 
+@tf.function
 def log_softmax(x):
     """
     Compute log-domain softmax of logits
@@ -92,7 +97,7 @@ def log_softmax(x):
 
 
 @tf.function
-def vat(x, logits, model, eps, xi=1e-6):
+def vat(x, logits, model, v, eps, xi=1e-6):
     """
     Generate an adeversarial perturbation.
 
@@ -100,26 +105,27 @@ def vat(x, logits, model, eps, xi=1e-6):
         x:          tensor, batch of labeled input images of shape [batch, height, width, channels]
         logits:     tensor, holding model outputs of input
         model:      tf.keras model
+        v:          generator, random number generator
         eps:        float, small epsilon
         xi:         float, small xi
 
     Returns:
         Adversarial perturbation to be applied to x.
     """
-    v = tf.random.Generator.from_non_deterministic_state()
+    # v = tf.random.Generator.from_non_deterministic_state()
     # v = tf.random.normal(shape=tf.shape(x))
 
-    for _ in range(1):
-        v = xi * get_normalized_vector(v.normal(shape=tf.shape(x)))
-        logits_p = logits
-        logits_m = model(x + v, training=True)[0]
-        dist = kl_divergence_with_logits(logits_p, logits_m)
-        grad = tf.gradients(tf.reduce_mean(dist), [v], aggregation_method=2)[0]
-        v = tf.stop_gradient(grad)
+    v = xi * get_normalized_vector(v.normal(shape=tf.shape(x)))
+    logits_p = logits
+    logits_m = model(x + v, training=True)[0]
+    dist = kl_divergence_with_logits(logits_p, logits_m)
+    grad = tf.gradients(tf.reduce_mean(dist), [v], aggregation_method=2)[0]
+    v = tf.stop_gradient(grad)
 
     return eps * get_normalized_vector(v)
 
 
+@tf.function
 def ssl_loss_vat(labels_x, logits_x, logits_student, logits_teacher, logits_u):
     """
     Computes cross entropy loss based on the labeled data model outputs, a

@@ -8,6 +8,7 @@ from ..libml.data_augmentations import weak_augment, medium_augment, strong_augm
 
 
 
+@tf.function
 def compute_rot_loss(x, model, w_rot=0.5):
     """
     Compute auxiliary rotation loss.
@@ -32,11 +33,12 @@ def compute_rot_loss(x, model, w_rot=0.5):
         loss_rot = tf.nn.softmax_cross_entropy_with_logits(labels=labels_rot, logits=logits_rot)
         loss_rot = tf.reduce_mean(loss_rot)
     else:
-        loss_rot = 0
+        loss_rot = 0.0
 
     return loss_rot
 
 
+@tf.function
 def compute_kl_loss(model, u_augment, labels_u, w_kl=0):
     """
     Compute Kullback-Leibler Loss baed on unlabeled augmented input images.
@@ -58,7 +60,7 @@ def compute_kl_loss(model, u_augment, labels_u, w_kl=0):
         loss_kl = tf.nn.softmax_cross_entropy_with_logits(labels=labels_u, logits=logits_u_aug)
         loss_kl = tf.reduce_mean(loss_kl)
     else:
-        loss_kl = 0
+        loss_kl = 0.0
 
     return loss_kl
 

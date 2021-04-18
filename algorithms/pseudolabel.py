@@ -23,6 +23,7 @@ def pseudo_label(x, u, height, width):
     return x_aug, u_aug
 
 
+@tf.function
 def ssl_loss_pseudo_label(labels_x, logits_x, logits_u, threshold=0.95):
     """
     Computes two cross entropy losses based on the labeled and unlabeled data.

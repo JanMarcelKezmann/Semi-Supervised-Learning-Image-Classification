@@ -25,6 +25,7 @@ def mean_teacher(x, u, height, width, seed=29598):
     return x_aug, u_t, u_s
 
 
+@tf.function
 def ssl_loss_mean_teacher(labels_x, logits_x, logits_teacher, logits_student):
     """
     Computes two cross entropy losses based on the labeled and unlabeled data.

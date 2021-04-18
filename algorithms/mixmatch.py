@@ -132,11 +132,3 @@ def ssl_loss_mixmatch(labels_x, logits_x, labels_u, logits_u):
 	loss_u = tf.reduce_mean(loss_u)
 
 	return loss_x, loss_u
-
-
-def linear_rampup(epoch, rampup=16):
-    if rampup == 0:
-        return 1.
-    else:
-        rampup = np.clip(epoch / rampup, 0., 1.)
-        return float(rampup)
