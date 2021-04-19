@@ -44,30 +44,30 @@ def _list_to_tf_dataset(dataset):
 	
 
 def split_dataset(dataset, num_labeled_data, num_validations, num_classes):
-    dataset = dataset.shuffle(buffer_size=10000)
-    counter = [0 for _ in range(num_classes)]
+	dataset = dataset.shuffle(buffer_size=10000)
+	counter = [0 for _ in range(num_classes)]
 
-    labeled, unlabeled, validation = [], [], []
-    for sample in iter(dataset):
-        label = int(sample["label"])
-        counter[label] += 1
-        if counter[label] <= (num_labeled_data / num_classes):
-            labeled.append(sample)
-            continue
-        elif counter[label] <= (num_validations / num_classes + num_labeled_data / num_classes):
-            validation.append(sample)
-        else:
-            unlabeled.append({
-                "id": sample["id"],
-                "image": sample["image"],
-                "label": tf.convert_to_tensor(-1, dtype=tf.int64)
-            })
+	labeled, unlabeled, validation = [], [], []
+	for sample in iter(dataset):
+		label = int(sample["label"])
+		counter[label] += 1
+		if counter[label] <= (num_labeled_data / num_classes):
+			labeled.append(sample)
+			continue
+		elif counter[label] <= (num_validations / num_classes + num_labeled_data / num_classes):
+			validation.append(sample)
+		else:
+			unlabeled.append({
+				"id": sample["id"],
+				"image": sample["image"],
+				"label": tf.convert_to_tensor(-1, dtype=tf.int64)
+			})
 
-    labeled = _list_to_tf_dataset(labeled)
-    unlabeled = _list_to_tf_dataset(unlabeled)
-    validation = _list_to_tf_dataset(validation)
+	labeled = _list_to_tf_dataset(labeled)
+	unlabeled = _list_to_tf_dataset(unlabeled)
+	validation = _list_to_tf_dataset(validation)
 
-    return labeled, unlabeled, validation
+	return labeled, unlabeled, validation
 
 
 def _bytes_feature(value):

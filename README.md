@@ -9,16 +9,18 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 ## Main Library Features
 
  - High Level API
- - 4 Semi Supervised Learning Algorithms for Image Classification (more to come)
+ - 9 Semi Supervised Learning Algorithms for Image Classification (more to come)
  - Many classic and state-of-the-art CNN Models for training available (including pretraining on ImageNet)
+ - Code is executable in the console as well as in all kind of Jupyter Notebooks
 
 # Table of Contents
 
  - [Examples](#examples)
  - [Installation and Setup](#installation-and-setup)
- - [Run an example](#run-a-pipeline)
- - [Algorithms and Papers](#algorithms-and-papers)
+ - [Run an example](#run-an-example)
+ - [Algorithms its Papers and Implementations](#algorithms-its-papers-and-implementations)
  - [Models and Optimizers](#models-and-optimizers)
+ - [Add Custom and Public Datasets](#add-custom-and-public-datasets)
  - [Citing](#citing)
  - [License](#license)
  - [References](#references)
@@ -33,11 +35,13 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 **Requirements**
 1) Python >= 3.6
-2) tensorflow >= 2.0.0
+2) tensorflow >= 2.4.1
 3) tensorflow_probability >= 0.10.1
-4) numpy >= 1.16.0
+4) numpy >= 1.19.2
 5) pyyaml >= 5.0.0
 6) tqdm >= 4.0.0
+
+<p>Future updates will allow older tensorflow 2.x versions to be compatible with this repository</p>
 
 <p>Furthermore just execute the following command to download and install the git repository.</p>
 
@@ -45,13 +49,72 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
     $ git clone https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification.git
     
+or directly install it:<br>
+**Pip Install Repository**
+
+    $ pip install git+https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification.git
+    
 ## Run An Example
 
-(To be developed)
+First, please check that the requirements are all fullfilled.
 
-## Algorithms and Papers
+Now create a file called *test_sslic.py*
 
-(To be developed)
+To import the library just use the standard python import statement:
+
+```python
+import ssl_image_classifcation as sslic
+```
+
+Now you can easly check if the installation worked properly by running:
+
+```python
+print(sslic.__version)
+```
+
+Then in order to set up and use the argument parser properly add the following lines:
+
+```python
+# Get argument parser from sslic
+parser = sslic.get_arg_parser()
+
+# Parse arguments
+parser_args = parser.parse_args()
+
+# Save parser_args as python dictionary
+parser_args = vars(parser_args)
+```
+
+The main() function in ssl_image_classification can now be run easily, which will automatically trigger a training process depeding on the arguments specified in the argument parser.
+
+```python
+sslic.main(args=parser_args)
+```
+
+Now, in order to run the code in the console just run the following (in the console):
+
+    $ python test_sslic.py
+    
+You can (and probably should) change some arguments in order to use different ssl algorithms, cnn models, optimizers, datasets, epochs, learning rates and so on. For details about the arguments the parser takes take a look <a href="">here</a>.
+
+    $ python test_sslic.py --algorithm "fixmatch" --models "efficientnetb3" --dataset "cifar10" --epochs 100 --batch-size 128 --config-path "dataset configurations"
+    
+If the installation was executed properly a trainging process should start.
+In order to see what arguments the argument parser finally parsed, the dictionary will automatically be printed including all modified and default arguments.
+
+For further examples, please take a look at the examples section or the examples folder.
+
+## Algorithms its Papers and Implementations
+
+ - **<a href="https://arxiv.org/pdf/1710.09412.pdf">Mixup</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/mixup.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/pdf/1905.02249v2.pdf">Mixmatch</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/mixmatch.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/pdf/1911.09785v2.pdf">ReMixMatch</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/remixmatch.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/pdf/2001.07685.pdf">FixMatch</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/fixmatch.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/pdf/1707.03976v2.pdf">VAT</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/vat.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/pdf/1703.01780v6.pdf">Mean Teacher</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/meanteacher.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/pdf/1606.04586v1.pdf">Pi Model</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/pimodel.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://www.researchgate.net/publication/280581078_Pseudo-Label_The_Simple_and_Efficient_Semi-Supervised_Learning_Method_for_Deep_Neural_Networks">Pseudo Label</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/pseudolabel.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
+ - **<a href="https://arxiv.org/abs/1903.03825.pdf">Interpolation Consistency Training (ICT)</a>** &nbsp; <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/algorithms/ict.py"><img align="center" width="20px" src="https://cdn.iconscout.com/icon/free/png-512/code-280-460136.png" /></a>
 
 ## Models and Optimizers
 
@@ -70,7 +133,38 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 ### Optimizers
 
+| Name        | Adjustable Parameters |
+|-------------|-----------------------|
+|**Adadelta** | ``'learning_rate', 'rho'`` |
+|**Adagrad**  | ``'learning_rate'`` |
+|**Adam**     | ``'learning_rate', 'beta_1', 'beta_2'`` |
+|**Adamax**   | ``'learning_rate', 'beta_1', 'beta_2'`` |
+|**Nadam**    | ``'learning_rate', 'beta_1', 'beta_2'`` |
+|**RMSprop**  | ``'learning_rate', 'rho', 'momentum'`` |
+|**SGD**      | ``'learning_rate', 'momentum'`` |
+
+The according parser arguments to adjust the parameters of the optimizers are the following (ordered alphabetically):
+
+| Parameter Name   | Parser argument |
+|------------------|-----------------|
+|**beta_1**        | ``--beta1`` |
+|**beta_2**        | ``--beta2`` |
+|**learning_rate** | ``--lr`` |
+|**momentum**      | ``--momentum`` |
+|**rho**           | ``--rho`` |
+
+## Add Public and Custom Datasets
+
+<p>When cloning the current repository only the general and dataset related configurations for the public *Cifar10* are provided. In order to use any public dataset, e.g. from TensorFlow Dataset or any custom dataset with custom data, a few simple steps needs to be taken. To incorporate new datasets and its configurations follow the next couple of steps either for public TFDS dataset or any other custom dataset.</p>
+
+### Public TensorFlow Datasets
+
 (To be developed)
+
+### Custom Datasets
+
+(To be developed)
+
 
 ## Citing
 

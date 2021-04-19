@@ -1,22 +1,23 @@
 import argparse
 import os
 from absl import logging
-from libml.utils import setup_tf, load_config
+from .libml.utils import setup_tf, load_config
 
 setup_tf()
+print("TensorFlow is set up properly.")
 
 import numpy as np
 import tensorflow as tf
 import tensorflow_probability as tfp
 import tqdm
 
-from libml.models import get_model
-from libml.optimizers import get_optimizer
-from libml.preprocess import fetch_dataset
-from libml.train_utils import ema, weight_decay, linear_rampup
-from libml.data_augmentations import weak_augment, medium_augment, strong_augment
+from .libml.models import get_model
+from .libml.optimizers import get_optimizer
+from .libml.preprocess import fetch_dataset
+from .libml.train_utils import ema, weight_decay, linear_rampup
+from .libml.data_augmentations import weak_augment, medium_augment, strong_augment
 
-from algorithms import mixup, mixmatch, remixmatch, fixmatch, vat, meanteacher, pimodel, pseudolabel, ict
+from .algorithms import mixup, mixmatch, remixmatch, fixmatch, vat, meanteacher, pimodel, pseudolabel, ict
 
 
 tfd = tfp.distributions
@@ -255,7 +256,7 @@ def train(labeled_data, unlabeled_data, model, ema_model, opt, epoch, num_classe
     else:
         prog_bar = tqdm.tqdm(range(args["pre_val_iter"]), unit="batch")
     
-    for batch_num in prog_bar:
+    for iteration in prog_bar:
         # Get next batch of labeled and unlabeled data
         try:
             labeled_batch = next(iter_labeled_data)
