@@ -4,7 +4,7 @@ from absl import logging
 from .libml.utils import setup_tf, load_config
 
 setup_tf()
-print("TensorFlow is set up properly.")
+# print("TensorFlow is set up properly.")
 
 import numpy as np
 import tensorflow as tf
@@ -18,12 +18,14 @@ from .libml.train_utils import ema, weight_decay, linear_rampup
 from .libml.data_augmentations import weak_augment, medium_augment, strong_augment
 
 from .algorithms import mixup, mixmatch, remixmatch, fixmatch, vat, meanteacher, pimodel, pseudolabel, ict
+from .algorithms import ssl_loss_mixup, ssl_loss_mixmatch, ssl_loss_remixmatch, ssl_loss_fixmatch, ssl_loss_vat
+from .algorithms import ssl_loss_mean_teacher, ssl_loss_pi_model, ssl_loss_pseudo_label, ssl_loss_ict
 
 
 tfd = tfp.distributions
 
 
-def get_args(parser_args=[]):
+def get_arg_parser():
     """
     Define Argument Parser.
 
@@ -103,11 +105,12 @@ def get_args(parser_args=[]):
     parser.add_argument("--resume", action="store_true", help="Bool for restoring from preious training runs")
     parser.add_argument("--notebook", action="store_true", help="Bool for TQDM training visualization")
 
-    return parser.parse_args(args=parser_args)
+    # return parser.parse_args(args=parser_args)
     # return parser.parse_args()
+    return parser
 
 
-def main():
+def main(parser_args=[], args={}):
     """
     Main function that loads configurations, fetches data, defines the model,
     optimizer and further classes, runs training, validation and testing and
@@ -121,7 +124,9 @@ def main():
         None
     """
     # Set __dict__ attribute of get_args()
-    args = vars(get_args())
+    if args == {}:
+        parser = get_arg_parser()
+        args = vars(parser.parse_args(args=parser_args))
     # # Get directory name of real path
     # dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -191,8 +196,8 @@ def main():
     for epoch in range(start_epoch, args["epochs"]):
         x_loss, u_loss, total_loss, accuracy = train(labeled_data, unlabeled_data, model, ema_model, optimizer, epoch, num_classes, args)
 
-        val_x_loss, val_accuracy = validate(val_data, ema_model, epoch, args, split="Validation")
-        test_x_loss, test_accuracy = validate(test_data, ema_model, epoch, args, split="Test")
+        val_x_loss, val_accuracy = validate(val_data, model, ema_model, epoch, args, split="Validation")
+        test_x_loss, test_accuracy = validate(test_data, model, ema_model, epoch, args, split="Test")
 
         if (epoch - start_epoch) % 10 == 0:
             model_save_path = manager.save(checkpoint_number=int(model_ckpt.step))
@@ -691,5 +696,5 @@ def validate(dataset=None, model=None, ema_model=None, epoch=1, args={}, split="
 
     return x_avg, acc
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
