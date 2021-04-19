@@ -76,7 +76,7 @@ Then in order to set up and use the argument parser properly add the following l
 
 ```python
 # Get argument parser from sslic
-parser = sslic.get_arg_parser()
+parser = sslic.get_arg_parser(console_args=True)
 
 # Parse arguments
 parser_args = parser.parse_args()
