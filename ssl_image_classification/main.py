@@ -4,7 +4,6 @@ from absl import logging
 from .libml.utils import setup_tf, load_config
 
 setup_tf()
-# print("TensorFlow is set up properly.")
 
 import numpy as np
 import tensorflow as tf
@@ -25,17 +24,25 @@ from .algorithms import ssl_loss_mean_teacher, ssl_loss_pi_model, ssl_loss_pseud
 tfd = tfp.distributions
 
 
-def get_arg_parser():
+def get_arg_parser(parser_args=[], console_args=False):
     """
-    Define Argument Parser.
+    Define Argument Parser or return arguments
+    In main() parser_args (list) can be specified and put into parser while parsing.
+    This is helpful when main() is run in a Jupyter Notebook enviroment or similar.
+    If main() is run in an console or a different kind of Python IDE like PyCharm, VSC, ..., then
+    console_args should be set to True when non default settings should be given to the argparser.
+    See ReadMe for examples or Example below.
 
     Args:
-        parser_args: list, taking argument and corresponding value as elements
-                        (Only necessary in Jupyter Notebooks or similar)
+        parser_args:    list, taking argument and corresponding value as elements
+                            (Only necessary in Jupyter Notebooks or similar)
+        console_args:   Boolean, if argument should be provided via console and not as list,
+                            then set to True
 
     Returns:
-        dictionary containing arguments of parser as keys and its corresponding 
+        Either dictionary containing arguments of parser as keys and its corresponding 
         values as values.
+        Or parser that will be parsed seperately afterwards.
 
     Example:
         In case you are working in an Jupyter Notebook environment like Google
@@ -44,10 +51,24 @@ def get_arg_parser():
         This means, if you e.g. would like to change the config-path and set the
         notebook setting to True create a list like this:
 
-        parser_args = ["--epochs", "2", "--config-path", "dataset configurations", "--notebook"]
+            parser_args = ["--epochs", "2", "--config-path", "dataset configurations", "--notebook"]
 
         Name the argument first and the corresponding value second.
         In case of Boolean arguments only the argument itself is necessary.
+
+        In case you are working with a different kind of Developer environment and run the
+        code over a console/command line then do the following:
+        
+        1.) In your code define the argparser, parse it and give the dictionary as an argument to the main() function
+
+            parser = sslic.get_arg_parser(console_args=True)
+            parser_args = parser.parse_args()
+
+            sslic.main(args=vars(parser_args))
+
+        2.) When you now execute your code it, you can specify the arguments like the following:
+
+            $ python3 <your_program_name>.py --epochs 2 --config-path "dataset configurations"
     """
     parser = argparse.ArgumentParser("parameters")
 
@@ -105,31 +126,31 @@ def get_arg_parser():
     parser.add_argument("--resume", action="store_true", help="Bool for restoring from preious training runs")
     parser.add_argument("--notebook", action="store_true", help="Bool for TQDM training visualization")
 
-    # return parser.parse_args(args=parser_args)
-    # return parser.parse_args()
-    return parser
+    if console_args:
+        return parser
+    else:
+        return parser.parse_args(args=parser_args)
 
 
-def main(parser_args=[], args={}):
+def main(parser_args=[], console_args=False):
     """
     Main function that loads configurations, fetches data, defines the model,
     optimizer and further classes, runs training, validation and testing and
     saves every result.
 
     Args:
-        parser_args: list, contains keys and values for argument parser, see 
-        Example in get_args() for more information
+        parser_args:    list, contains keys and values for argument parser, see 
+                            Example in get_args() for more information
+        console_args:   Boolean, whether code is run over console/command line or in an notebook environment 
 
     Returns:
         None
     """
-    # Set __dict__ attribute of get_args()
-    if args == {}:
-        parser = get_arg_parser()
-        args = vars(parser.parse_args(args=parser_args))
-    # # Get directory name of real path
-    # dir_path = os.path.dirname(os.path.realpath(__file__))
-
+    # Get arguments if notebook environment
+    if not console_args:
+        args = vars(get_arg_parser(parser_args=parser_args))
+   
+    # Load dataset specific arguments
     if args["config_path"] is not None and os.path.exists(args["config_path"]):
         args = load_config(args)
     print(args)
@@ -230,6 +251,23 @@ def main(parser_args=[], args={}):
             writer.flush()
 
 def train(labeled_data, unlabeled_data, model, ema_model, opt, epoch, num_classes, args):
+    """
+    Runs one training epoch.
+
+    Args:
+        labeled_data:       tensor, labeled data of shape [num_lab_samples, height, width, channels]
+        unlabled_data:      tensor, unlabeled data of shape [total_train_samples - num_lab_samples - val_samples, height, width, channels]
+        model:              tf.keras Model
+        ema_model:          tf.keras Model
+        opt:                tf.keras.optimizers.Optimizer
+        epoch:              int, current epoch
+        num_classes:        int, number of classes in the dataset
+        args:               dictionary, contains arguments from Argument Parser as key, value pairs
+
+    Returns:
+        Returns average labeled loss, averages unlabeled loss, the total loss containing all auxiliary 
+        losses too and the mean acc of the current epoch.
+    """
     x_loss_avg = tf.keras.metrics.Mean()
     u_loss_avg = tf.keras.metrics.Mean()
     l2_loss_avg = tf.keras.metrics.Mean()
@@ -650,7 +688,23 @@ def train(labeled_data, unlabeled_data, model, ema_model, opt, epoch, num_classe
     elif args["algorithm"].lower() == "vat":
         return x_loss_avg, u_loss_avg, total_loss_avg, acc
 
+
 def validate(dataset=None, model=None, ema_model=None, epoch=1, args={}, split="Validation"):
+    """
+    Runs one training epoch.
+
+    Args:
+        dataset:    tensor, labeled data of shape [size, height, width, channels]
+        model:      tf.keras Model
+        ema_model:  tf.keras Model
+        opt:        tf.keras.optimizers.Optimizer
+        epoch:      int, current epoch
+        args:       dictionary, contains arguments from Argument Parser as key, value pairs
+        split:      string, either "Validation" or "Test"
+
+    Returns:
+        Returns average loss and the mean acc of the validation or test dataset.
+    """
     # Initialize Accuracy and Average Loss
     x_avg_ema = tf.keras.metrics.Mean()
     acc_ema = tf.keras.metrics.SparseCategoricalAccuracy()
