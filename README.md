@@ -45,9 +45,14 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
 
 <p>Furthermore just execute the following command to download and install the git repository.</p>
 
-**Clone Repository**
+**Clone Repository and Install Requirements**
 
     $ git clone https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification.git
+    
+    
+cd into the directory where requirements.txt is located.
+
+    $ pip install -r requirements.txt
     
 or directly install it:<br>
 **Pip Install Repository**
