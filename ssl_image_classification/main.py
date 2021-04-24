@@ -98,6 +98,7 @@ def get_arg_parser(parser_args=[], console_args=False):
     parser.add_argument("--threshold", type=float, default=0.95, help="Confidence or threshold parameter used in multiple unsupervised losses (Fixmatch and Pseudo label)")
 
     # Dataset related arguments
+    parser.add_argument("--num-classes", type=int, default=10, help="Number of classes of the dataset")
     parser.add_argument("--num-lab-samples", type=int, default=4000, help="Total Number of labeled samples")
     parser.add_argument("--val-samples", type=int, default=1000, help="Total Number of validation samples")
     parser.add_argument("--total-train-samples", type=int, default=50000, help="Total number of train samples")
@@ -160,10 +161,10 @@ def main(parser_args=[], console_args=False):
     log_path = f"logs/{args['dataset']}@{args['num_lab_samples']}"
     ckpt_dir = f"{log_path}/checkpoints"
 
-    labeled_data, unlabeled_data, val_data, test_data, num_classes = fetch_dataset(args, log_path)
+    labeled_data, unlabeled_data, val_data, test_data = fetch_dataset(args, log_path)
 
     # Define Model, Optimizer and Checkpoints
-    model = get_model(name=args["model"], weights=args["weights"], height=args["height"], width=args["width"], classes=num_classes)
+    model = get_model(name=args["model"], weights=args["weights"], height=args["height"], width=args["width"], classes=args["num_classes"])
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         args["lr"],
         decay_steps=10000,
@@ -175,7 +176,7 @@ def main(parser_args=[], console_args=False):
     manager = tf.train.CheckpointManager(model_ckpt, f"{ckpt_dir}/model", max_to_keep=10)
 
     # Define EMA-Model, EMA-Model Weights and EMA-Checkpoint
-    ema_model = get_model(name=args["model"], weights=args["weights"], height=args["height"], width=args["width"], classes=num_classes)
+    ema_model = get_model(name=args["model"], weights=args["weights"], height=args["height"], width=args["width"], classes=args["num_classes"])
     ema_model.set_weights(model.get_weights())
     ema_model_ckpt = tf.train.Checkpoint(step=tf.Variable(0), net=ema_model)
     ema_manager = tf.train.CheckpointManager(ema_model_ckpt, f"{ckpt_dir}/ema_model", max_to_keep=5)
@@ -215,7 +216,7 @@ def main(parser_args=[], console_args=False):
     
     # Loop over all (remaining) epochs
     for epoch in range(start_epoch, args["epochs"]):
-        x_loss, u_loss, total_loss, accuracy = train(labeled_data, unlabeled_data, model, ema_model, optimizer, epoch, num_classes, args)
+        x_loss, u_loss, total_loss, accuracy = train(labeled_data, unlabeled_data, model, ema_model, optimizer, epoch, args)
 
         val_x_loss, val_accuracy = validate(val_data, model, ema_model, epoch, args, split="Validation")
         test_x_loss, test_accuracy = validate(test_data, model, ema_model, epoch, args, split="Test")
@@ -250,7 +251,7 @@ def main(parser_args=[], console_args=False):
         for writer in [train_writer, val_writer, test_writer]:
             writer.flush()
 
-def train(labeled_data, unlabeled_data, model, ema_model, opt, epoch, num_classes, args):
+def train(labeled_data, unlabeled_data, model, ema_model, opt, epoch, args):
     """
     Runs one training epoch.
 
@@ -261,7 +262,6 @@ def train(labeled_data, unlabeled_data, model, ema_model, opt, epoch, num_classe
         ema_model:          tf.keras Model
         opt:                tf.keras.optimizers.Optimizer
         epoch:              int, current epoch
-        num_classes:        int, number of classes in the dataset
         args:               dictionary, contains arguments from Argument Parser as key, value pairs
 
     Returns:
