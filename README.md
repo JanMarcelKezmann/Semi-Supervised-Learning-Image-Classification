@@ -20,7 +20,7 @@ This library contains Semi-Supervised Learning Algorithms for Computer Vision ta
  - [Run an example](#run-an-example)
  - [Algorithms its Papers and Implementations](#algorithms-its-papers-and-implementations)
  - [Models and Optimizers](#models-and-optimizers)
- - [Add Custom and Public Datasets](#add-custom-and-public-datasets)
+ - [Add Public and Custom Datasets](#add-public-and-custom-datasets)
  - [Citing](#citing)
  - [License](#license)
  - [References](#references)
@@ -164,7 +164,30 @@ The according parser arguments to adjust the parameters of the optimizers are th
 
 ### Public TensorFlow Datasets
 
-(To be developed)
+<p>Embedding a new TensorFlow Dataset into the semi-supervised learning pipeline requires only a few steps. First, you need to pick a dataset from TensorFlow datasets and some informations of it. Second, you need to create a <TFDS Dataset Name>.yaml which will be later used by the semi-supervised learning pipeline for dataset downloading and information extraction.</p>
+<p>Now, follow the following steps, in order to embed a new TensorFlow Dataset into your training pipeline:</p>
+
+ 1.) Visit <a href="https://www.tensorflow.org/datasets/catalog/overview">TensorFlow Datasets Overview</a><br>
+ 2.) Under the Category *Image Classification* pick a dataset by clicking on it<br>
+ 3.) Now, create a YAML file by naming it <TFDS Dataset Name><at><num_lab_samples>.yaml.<br>
+   - For example, you picked the *svhn_cropped* dataset and the total number of labeled data samples you want to have is 10.000, then the file should be named: *svhn_cropped@10000.yaml*<br>
+   
+ 4.) Add information about the dataset in the YAML file:
+
+    dataset: 'svhn_cropped'
+    num_lab_samples: <Number of labeled samples>
+    val_samples: <Number of validation samples>
+    total_train_samples: <Total number of training samples>
+    pre_val_iter: <Round((total_train_samples - num_lab_samples - val_samples) / BATCH_SIZE)>
+    height: <Height of the images>
+    width: <Width of the images>
+    channels: <Number of channels>
+    
+ 5.) Store the file, e.g., under *dataset configurations*, this subdirectory which is in the same directory as the main.py file from where your ssl code is run should be put as argument *--config-path* in the ArgumentParser<br>
+ 6.) Finished!<br>
+
+Under 4.), *total_train_samples* can be taken from the information page of the dataset in TensorFlow, i.e. point 2.).<br>
+**Important**, *num_lab_samples* and *val_samples* can be in theory chosen arbitrarily, but I recommend to choose it, such that the number of unlabeled samples, i.e. (total_train_samples - num_lab_samples - val_samples) is a multiple of num_lab_samples itself.
 
 ### Custom Datasets
 
