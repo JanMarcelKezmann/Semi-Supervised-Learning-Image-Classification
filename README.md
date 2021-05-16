@@ -74,7 +74,7 @@ import ssl_image_classifcation as sslic
 Now you can easly check if the installation worked properly by running:
 
 ```python
-print(sslic.__version)
+print(sslic.__version__)
 ```
 
 Then in order to set up and use the argument parser properly add the following lines:
