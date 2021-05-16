@@ -63,7 +63,7 @@ or directly install it:<br>
 
 First, please check that the requirements are all fullfilled.
 
-Now create a file called *test_sslic.py*
+Now create a file called *train_sslic.py*
 
 To import the library just use the standard python import statement:
 
@@ -98,11 +98,11 @@ sslic.main(args=parser_args)
 
 Now, in order to run the code in the console just run the following (in the console):
 
-    $ python test_sslic.py
+    $ python train_sslic.py
     
-You can (and probably should) change some arguments in order to use different ssl algorithms, cnn models, optimizers, datasets, epochs, learning rates and so on. For details about the arguments the parser takes take a look <a href="">here</a>.
+You can (and probably should) change some arguments in order to use different ssl algorithms, cnn models, optimizers, datasets, epochs, learning rates and so on. For details about the arguments the parser takes take a look <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/main.py">here</a>.
 
-    $ python test_sslic.py --algorithm "fixmatch" --models "efficientnetb3" --dataset "cifar10" --epochs 100 --batch-size 128 --config-path "dataset configurations"
+    $ python train_sslic.py --algorithm "fixmatch" --models "efficientnetb3" --dataset "cifar10" --epochs 100 --batch-size 128 --config-path "dataset configurations"
     
 If the installation was executed properly a trainging process should start.
 In order to see what arguments the argument parser finally parsed, the dictionary will automatically be printed including all modified and default arguments.
