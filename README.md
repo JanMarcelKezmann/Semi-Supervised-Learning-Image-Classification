@@ -102,7 +102,7 @@ Now, in order to run the code in the console just run the following (in the cons
     
 You can (and probably should) change some arguments in order to use different ssl algorithms, cnn models, optimizers, datasets, epochs, learning rates and so on. For details about the arguments the parser takes take a look <a href="https://github.com/JanMarcelKezmann/Semi-Supervised-Learning-Image-Classification/blob/main/ssl_image_classification/main.py">here</a>.
 
-    $ python train_sslic.py --algorithm "fixmatch" --models "efficientnetb3" --dataset "cifar10" --epochs 100 --batch-size 128 --config-path "dataset configurations"
+    $ python train_sslic.py --algorithm "fixmatch" --model "efficientnetb3" --dataset "cifar10" --epochs 100 --batch-size 128 --config-path "dataset configurations"
     
 If the installation was executed properly a trainging process should start.
 In order to see what arguments the argument parser finally parsed, the dictionary will automatically be printed including all modified and default arguments.
