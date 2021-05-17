@@ -19,7 +19,7 @@ from .libml.data_augmentations import weak_augment, medium_augment, strong_augme
 from .algorithms import mixup, mixmatch, remixmatch, fixmatch, vat, meanteacher, pimodel, pseudolabel, ict
 from .algorithms import ssl_loss_mixup, ssl_loss_mixmatch, ssl_loss_remixmatch, ssl_loss_fixmatch, ssl_loss_vat
 from .algorithms import ssl_loss_mean_teacher, ssl_loss_pi_model, ssl_loss_pseudo_label, ssl_loss_ict
-
+from .algorithms.remixmatch import compute_rot_loss
 
 tfd = tfp.distributions
 
