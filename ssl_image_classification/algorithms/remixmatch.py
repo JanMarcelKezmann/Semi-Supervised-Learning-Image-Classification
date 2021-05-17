@@ -7,7 +7,6 @@ from . import mixup
 from ..libml.data_augmentations import weak_augment, medium_augment, strong_augment, random_rotate
 
 
-@tf.function
 def compute_rot_loss(x, model, w_rot=0.5):
     """
     Compute auxiliary rotation loss.
