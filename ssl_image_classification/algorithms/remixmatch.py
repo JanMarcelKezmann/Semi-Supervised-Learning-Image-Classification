@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 
 from . import mixup
+from .mixmatch import sharpen, guess_labels
 from ..libml.data_augmentations import weak_augment, medium_augment, strong_augment, random_rotate
 
 
