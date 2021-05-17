@@ -111,7 +111,7 @@ def get_arg_parser(parser_args=[], console_args=False):
 
     # Additional arguments for Mixmatch, ReMixMatch
     parser.add_argument("--T", type=float, default=0.5, help="Temperature sharpening ratio")
-    parser.add_argument("--K", type=float, default=2.0, help="Amount of augmentation rounds")
+    parser.add_argument("--K", type=int, default=2, help="Amount of augmentation rounds")
     
     # Additional arguments for ReMixMatch
     parser.add_argument("--w-rot", type=float, default=0.5, help="Rotation loss multiplier")
@@ -198,8 +198,8 @@ def main(parser_args=[], console_args=False):
         test_writer = tf.summary.create_file_writer(f"{log_path}/test")
 
     # Assigning args used in functions wrapped with tf.function to tf.constant/tf.Variable to avoid memory leaks
-    args["T"] = tf.constant(args["T"], dtype=tf.float32)
-    args["K"] = tf.constant(args["K"], dtype=tf.float32)
+    args["T"] = tf.constant(args["T"])
+    args["K"] = tf.constant(args["K"])
     args["epochs"] = tf.constant(args["epochs"])
     args["pre_val_iter"] = tf.constant(args["pre_val_iter"])
     args["threshold"] = tf.constant(args["threshold"])
