@@ -111,7 +111,7 @@ def get_arg_parser(parser_args=[], console_args=False):
 
     # Additional arguments for Mixmatch, ReMixMatch
     parser.add_argument("--T", type=float, default=0.5, help="Temperature sharpening ratio")
-    parser.add_argument("--K", type=int, default=2, help="Amount of augmentation rounds")
+    parser.add_argument("--K", type=float, default=2.0, help="Amount of augmentation rounds")
     
     # Additional arguments for ReMixMatch
     parser.add_argument("--w-rot", type=float, default=0.5, help="Rotation loss multiplier")
