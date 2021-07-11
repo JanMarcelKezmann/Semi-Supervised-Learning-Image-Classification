@@ -191,8 +191,7 @@ Under 4.), *total_train_samples* can be taken from the information page of the d
 
 ### Custom Datasets
 
-(To be developed)
-
+<p>The most straigt forward way is to transform your custom dataset inta a TensorFlow Dataset by following <a href="https://www.tensorflow.org/datasets/overview">this</a> Guide. Once you have created your TensorFlow Dataset simmply run go over the 6 steps explained above to embed the dataset such that it can be used by the semi supervised learning alogrithms provided in this repository.</p>
 
 ## Citing
 
